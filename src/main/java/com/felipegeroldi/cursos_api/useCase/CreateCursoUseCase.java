@@ -19,6 +19,7 @@ public class CreateCursoUseCase {
         var curso = Curso.builder()
             .name(dto.getName())
             .category(dto.getCategory())
+            .professor(dto.getProfessor())
             .status(Status.valueOf(dto.getStatus().toUpperCase()))
             .build();
 

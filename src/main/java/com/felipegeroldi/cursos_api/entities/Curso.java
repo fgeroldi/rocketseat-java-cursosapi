@@ -26,6 +26,7 @@ public class Curso {
     private UUID id;
     private String name;
     private String category;
+    private String professor;
     private Status status;
 
     @CreationTimestamp

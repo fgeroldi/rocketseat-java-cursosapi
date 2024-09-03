@@ -1,5 +1,6 @@
 package com.felipegeroldi.cursos_api.controllers;
 
+import com.felipegeroldi.cursos_api.useCase.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,11 +8,6 @@ import com.felipegeroldi.cursos_api.dto.CreateCursoDTO;
 import com.felipegeroldi.cursos_api.dto.UpdateCursoDTO;
 import com.felipegeroldi.cursos_api.entities.Curso;
 import com.felipegeroldi.cursos_api.exceptions.CursoNotFoundException;
-import com.felipegeroldi.cursos_api.useCase.CreateCursoUseCase;
-import com.felipegeroldi.cursos_api.useCase.DeleteCursoUseCase;
-import com.felipegeroldi.cursos_api.useCase.GetAllCursoUseCase;
-import com.felipegeroldi.cursos_api.useCase.UpdateCursoStatusUseCase;
-import com.felipegeroldi.cursos_api.useCase.UpdateCursoUseCase;
 
 import java.net.URI;
 import java.util.List;
@@ -37,17 +33,19 @@ public class CursosController {
     private DeleteCursoUseCase deleteCursoUseCase;
     private UpdateCursoUseCase updateCursoUseCase;
     private UpdateCursoStatusUseCase updateCursoStatusUseCase;
-
+    private GetCursoUseCase getCursoUseCase;
     
 
     public CursosController(CreateCursoUseCase createCursoUseCase, GetAllCursoUseCase getAllCursosUseCase,
-            DeleteCursoUseCase deleteCursoUseCase, UpdateCursoUseCase updateCursoUseCase,
-            UpdateCursoStatusUseCase updateCursoStatusUseCase) {
+                            DeleteCursoUseCase deleteCursoUseCase, UpdateCursoUseCase updateCursoUseCase,
+                            UpdateCursoStatusUseCase updateCursoStatusUseCase,
+                            GetCursoUseCase getCursoUseCase) {
         this.createCursoUseCase = createCursoUseCase;
         this.getAllCursosUseCase = getAllCursosUseCase;
         this.deleteCursoUseCase = deleteCursoUseCase;
         this.updateCursoUseCase = updateCursoUseCase;
         this.updateCursoStatusUseCase = updateCursoStatusUseCase;
+        this.getCursoUseCase = getCursoUseCase;
     }
 
     @PostMapping
@@ -67,6 +65,16 @@ public class CursosController {
         try {
             List<Curso> cursos = getAllCursosUseCase.execute();
             return ResponseEntity.ok().body(cursos);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{cursoId}")
+    public ResponseEntity<?> getAll(@PathVariable UUID cursoId) {
+        try {
+            Curso curso = getCursoUseCase.execute(cursoId);
+            return ResponseEntity.ok().body(curso);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }

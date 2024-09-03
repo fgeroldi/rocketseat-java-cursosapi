@@ -18,5 +18,8 @@ public class CreateCursoDTO {
     private String category;
 
     @NotEmpty
+    private String professor;
+
+    @NotEmpty
     private String status;
 }
